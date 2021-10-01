@@ -26,4 +26,7 @@ public class Usuario {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "hash")
+    private String hash;
 }

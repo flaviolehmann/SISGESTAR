@@ -8,11 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,7 +43,7 @@ public class TarefaResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<TarefaDTO> update(@PathVariable("id") Long id,
-                                         @RequestBody TarefaDTO tarefa) {
+                                            @RequestBody TarefaDTO tarefa) {
         tarefa.setId(id);
         return ResponseEntity.ok(tarefaService.save(tarefa));
     }
@@ -50,5 +52,13 @@ public class TarefaResource {
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         tarefaService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<TarefaDTO> atualizarStatus(@PathVariable("id") Long id,
+                                                     @RequestBody TarefaDTO tarefa,
+                                                     @RequestParam("hash") String hash) {
+        tarefa.setId(id);
+        return ResponseEntity.ok(tarefaService.atualizarStatus(tarefa, hash));
     }
 }

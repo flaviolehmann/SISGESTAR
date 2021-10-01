@@ -46,4 +46,6 @@ public class Tarefa {
     )
     private List<Usuario> acompanhadores = new ArrayList<>();
 
+    @Column(name = "id_st_tarefa")
+    private Long idStatus;
 }
