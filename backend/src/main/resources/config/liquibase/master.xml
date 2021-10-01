@@ -11,4 +11,8 @@
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/202109301339_create_acompanhadores_tarefa.changelog.xml"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/202110011305_create_status_tarefa.changelog.xml"
+             relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/202110011325_add_hash_usuario.changelog.xml"
+             relativeToChangelogFile="false"/>
 </databaseChangeLog>
