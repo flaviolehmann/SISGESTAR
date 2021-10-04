@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ public class TarefaService {
 
     private final TarefaRepository tarefaRepository;
     private final TarefaMapper tarefaMapper;
+    private final UsuarioService usuarioService;
 
     public List<TarefaListDTO> findAll() {
         return tarefaRepository.findAll().stream()
@@ -30,10 +32,21 @@ public class TarefaService {
     }
 
     public TarefaDTO save(TarefaDTO tarefaDTO) {
+        validarResponsavel(tarefaDTO);
+        definirStatusInicial(tarefaDTO);
         Tarefa tarefa = tarefaMapper.toEntity(tarefaDTO);
-        tarefa.setIdStatus(StatusTarefaEnum.A_FAZER.getId());
         tarefaRepository.save(tarefa);
         return tarefaMapper.toDTO(tarefa);
+    }
+
+    private void validarResponsavel(TarefaDTO tarefaDTO) {
+        if (Objects.nonNull(tarefaDTO.getIdResponsavel())) {
+            usuarioService.obterPorId(tarefaDTO.getIdResponsavel());
+        }
+    }
+
+    private void definirStatusInicial(TarefaDTO tarefa) {
+        tarefa.setIdStatus(StatusTarefaEnum.A_FAZER.getId());
     }
 
     public Optional<TarefaDTO> findById(Long id) {

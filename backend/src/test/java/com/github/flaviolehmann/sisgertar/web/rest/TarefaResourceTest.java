@@ -4,9 +4,11 @@ import com.github.flaviolehmann.sisgertar.builder.TarefaBuilder;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaDTO;
 import com.github.flaviolehmann.sisgertar.util.BaseIntTest;
 import com.github.flaviolehmann.sisgertar.util.TestUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -43,6 +45,20 @@ public class TarefaResourceTest extends BaseIntTest {
                         .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 )
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void inserirTarefaComResponsavelInexistente() throws Exception {
+        TarefaDTO tarefaDTO = tarefaBuilder.createTarefaDTO();
+        tarefaDTO.setIdResponsavel(Long.MAX_VALUE);
+
+        ResultActions resultActions = mockMvc
+                .perform(
+                        post("/api/tarefas")
+                                .content(TestUtil.convertObjectToJsonBytes(tarefaDTO))
+                                .contentType(TestUtil.APPLICATION_JSON_UTF8));
+        resultActions.andExpect(status().isBadRequest());
+        Assertions.assertEquals(resultActions.andReturn().getResponse().getErrorMessage(), "O usuário buscado não possui registro em banco.");
     }
 
     @Test
