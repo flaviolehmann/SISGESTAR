@@ -2,8 +2,10 @@ package com.github.flaviolehmann.sisgertar.service;
 
 
 import com.github.flaviolehmann.sisgertar.domain.Tarefa;
+import com.github.flaviolehmann.sisgertar.domain.Usuario;
 import com.github.flaviolehmann.sisgertar.domain.enumarations.StatusTarefaEnum;
 import com.github.flaviolehmann.sisgertar.repository.TarefaRepository;
+import com.github.flaviolehmann.sisgertar.service.dto.EmailDTO;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaDTO;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaListDTO;
 import com.github.flaviolehmann.sisgertar.service.error.TarefaNaoEncontradaException;
@@ -24,6 +26,7 @@ public class TarefaService {
     private final TarefaRepository tarefaRepository;
     private final TarefaMapper tarefaMapper;
     private final UsuarioService usuarioService;
+    private final SendMailService sendMailService;
 
     public List<TarefaListDTO> findAll() {
         return tarefaRepository.findAll().stream()
@@ -61,7 +64,8 @@ public class TarefaService {
         Tarefa tarefaEmBanco = tarefaRepository.findById(tarefaDTO.getId())
                 .orElseThrow(TarefaNaoEncontradaException::new);
         validarResponsavel(tarefaEmBanco, hash);
-        tarefaEmBanco.setIdStatus(tarefaDTO.getIdStatus());
+        atualizarStatus(tarefaEmBanco, tarefaDTO);
+        notificarAcompanhadores(tarefaEmBanco);
         tarefaRepository.save(tarefaEmBanco);
         return tarefaMapper.toDTO(tarefaEmBanco);
     }
@@ -70,5 +74,24 @@ public class TarefaService {
         if (!tarefa.getResponsavel().getHash().equals(hash)) {
             throw new UsuarioNaoAutorizadoException();
         }
+    }
+
+    private void atualizarStatus(Tarefa tarefa, TarefaDTO tarefaDTO) {
+        tarefa.setIdStatus(tarefaDTO.getIdStatus());
+    }
+
+    private void notificarAcompanhadores(Tarefa tarefa) {
+        tarefa.getAcompanhadores().forEach(acompanhador -> {
+            EmailDTO emailDTO = construirEmail(tarefa, acompanhador);
+            sendMailService.sendMail(emailDTO);
+        });
+    }
+
+    private EmailDTO construirEmail(Tarefa tarefa, Usuario acompanhador) {
+        EmailDTO emailDTO = new EmailDTO();
+        emailDTO.setAssunto("Movimentação em Tarefa " + tarefa.getNome());
+        emailDTO.setCorpo("O novo status da tarefa é " + StatusTarefaEnum.obterPorId(tarefa.getIdStatus()).getDescricao());
+        emailDTO.setDestinatario(acompanhador.getEmail());
+        return emailDTO;
     }
 }
