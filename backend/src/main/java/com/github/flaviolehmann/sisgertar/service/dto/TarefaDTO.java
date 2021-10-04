@@ -13,7 +13,7 @@ import java.util.List;
 public class TarefaDTO {
 
     private Long id;
-    private String titulo;
+    private String nome;
     private String descricao;
     private Long idResponsavel;
     private Long idStatus;

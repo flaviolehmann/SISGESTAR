@@ -19,17 +19,13 @@ public class TarefaBuilder {
 
     public TarefaDTO createTarefaDTO() {
         TarefaDTO tarefaDTO = new TarefaDTO();
-        tarefaDTO.setTitulo("Título Teste");
+        tarefaDTO.setNome("Título Teste");
         tarefaDTO.setDescricao("Descrição Teste");
         return tarefaDTO;
     }
 
     public TarefaDTO persistirTarefa(TarefaDTO tarefaDTO) {
         Tarefa tarefa = tarefaMapper.toEntity(tarefaDTO);
-
-        if (tarefa.getResponsavel().getId() == null) {
-            tarefa.setResponsavel(null);
-        }
         tarefa = tarefaRepository.save(tarefa);
         return tarefaMapper.toDTO(tarefa);
     }
