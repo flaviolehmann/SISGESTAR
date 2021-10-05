@@ -9,6 +9,7 @@ import com.github.flaviolehmann.sisgertar.service.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,5 +30,9 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(UsuarioNaoEncontradaException::new);
         return usuarioMapper.toDTO(usuario);
+    }
+
+    public Optional<UsuarioDTO> obterPorHash(String hash) {
+        return usuarioRepository.findByHash(hash).map(usuarioMapper::toDTO);
     }
 }

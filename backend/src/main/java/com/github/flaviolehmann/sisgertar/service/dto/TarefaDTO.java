@@ -1,7 +1,6 @@
 package com.github.flaviolehmann.sisgertar.service.dto;
 
 
-import com.github.flaviolehmann.sisgertar.domain.Usuario;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,7 +35,7 @@ public class Tarefa {
     @Column(name = "descricao")
     private String descricao;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_responsavel")
     private Usuario responsavel;
 
@@ -42,8 +43,7 @@ public class Tarefa {
     @JoinTable(
             name = "rel_tarefa_usuario",
             joinColumns = { @JoinColumn(name = "id_tarefa") },
-            inverseJoinColumns = { @JoinColumn(name = "id_usuario") }
-    )
+            inverseJoinColumns = { @JoinColumn(name = "id_usuario") })
     private List<Usuario> acompanhadores = new ArrayList<>();
 
     @Column(name = "id_st_tarefa")

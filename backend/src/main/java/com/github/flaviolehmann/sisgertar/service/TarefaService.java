@@ -7,11 +7,15 @@ import com.github.flaviolehmann.sisgertar.domain.enumarations.StatusTarefaEnum;
 import com.github.flaviolehmann.sisgertar.repository.TarefaRepository;
 import com.github.flaviolehmann.sisgertar.service.dto.EmailDTO;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaDTO;
+import com.github.flaviolehmann.sisgertar.service.dto.TarefaFilterDTO;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaListDTO;
+import com.github.flaviolehmann.sisgertar.service.dto.UsuarioDTO;
 import com.github.flaviolehmann.sisgertar.service.error.TarefaNaoEncontradaException;
 import com.github.flaviolehmann.sisgertar.service.error.UsuarioNaoAutorizadoException;
 import com.github.flaviolehmann.sisgertar.service.mapper.TarefaMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +36,10 @@ public class TarefaService {
         return tarefaRepository.findAll().stream()
                 .map(tarefaMapper::toListDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Page<TarefaListDTO> findAll(TarefaFilterDTO filterDTO, Pageable page) {
+        return tarefaRepository.filtrarTarefas(filterDTO, page);
     }
 
     public TarefaDTO save(TarefaDTO tarefaDTO) {
@@ -71,7 +79,8 @@ public class TarefaService {
     }
 
     private void validarResponsavel(Tarefa tarefa, String hash) {
-        if (!tarefa.getResponsavel().getHash().equals(hash)) {
+        UsuarioDTO responsavel = usuarioService.obterPorId(tarefa.getResponsavel().getId());
+        if (!responsavel.getHash().equals(hash)) {
             throw new UsuarioNaoAutorizadoException();
         }
     }

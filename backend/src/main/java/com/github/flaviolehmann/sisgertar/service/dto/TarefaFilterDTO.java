@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TarefaListDTO {
+public class TarefaFilterDTO {
 
-    private Long id;
     private String nome;
 }
