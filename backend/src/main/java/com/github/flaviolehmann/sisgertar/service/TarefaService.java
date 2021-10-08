@@ -32,12 +32,6 @@ public class TarefaService {
     private final UsuarioService usuarioService;
     private final SendMailService sendMailService;
 
-    public List<TarefaListDTO> findAll() {
-        return tarefaRepository.findAll().stream()
-                .map(tarefaMapper::toListDTO)
-                .collect(Collectors.toList());
-    }
-
     public Page<TarefaListDTO> findAll(TarefaFilterDTO filterDTO, Pageable page) {
         return tarefaRepository.filtrarTarefas(filterDTO, page);
     }
@@ -69,13 +63,22 @@ public class TarefaService {
     }
 
     public TarefaDTO atualizarStatus(TarefaDTO tarefaDTO, String hash) {
-        Tarefa tarefaEmBanco = tarefaRepository.findById(tarefaDTO.getId())
-                .orElseThrow(TarefaNaoEncontradaException::new);
+        Tarefa tarefaEmBanco = obterTarefaEmBanco(tarefaDTO);
         validarResponsavel(tarefaEmBanco, hash);
+        validarProximoStatus(tarefaEmBanco, StatusTarefaEnum.obterPorId(tarefaDTO.getIdStatus()));
         atualizarStatus(tarefaEmBanco, tarefaDTO);
         notificarAcompanhadores(tarefaEmBanco);
         tarefaRepository.save(tarefaEmBanco);
         return tarefaMapper.toDTO(tarefaEmBanco);
+    }
+
+    private Tarefa obterTarefaEmBanco(TarefaDTO tarefaDTO) {
+        return tarefaRepository.findById(tarefaDTO.getId())
+                .orElseThrow(TarefaNaoEncontradaException::new);
+    }
+
+    private void validarProximoStatus(Tarefa tarefaEmBanco, StatusTarefaEnum proximoStatus) {
+        StatusTarefaEnum.obterPorId(tarefaEmBanco.getIdStatus()).validarProximoStatus(proximoStatus);
     }
 
     private void validarResponsavel(Tarefa tarefa, String hash) {

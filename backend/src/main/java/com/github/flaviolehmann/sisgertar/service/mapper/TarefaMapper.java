@@ -3,6 +3,7 @@ package com.github.flaviolehmann.sisgertar.service.mapper;
 
 import com.github.flaviolehmann.sisgertar.domain.Tarefa;
 import com.github.flaviolehmann.sisgertar.domain.Usuario;
+import com.github.flaviolehmann.sisgertar.domain.enumarations.StatusTarefaEnum;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaDTO;
 import com.github.flaviolehmann.sisgertar.service.dto.TarefaListDTO;
 import org.mapstruct.AfterMapping;
@@ -34,5 +35,11 @@ public interface TarefaMapper extends EntityMapper<Tarefa, TarefaDTO> {
         if (Objects.isNull(tarefa.getResponsavel().getId())) {
             tarefa.setResponsavel(null);
         }
+    }
+
+    @AfterMapping
+    default void atualizarDescricaoStatus(@MappingTarget TarefaDTO tarefaDTO) {
+        StatusTarefaEnum statusTarefaEnum = StatusTarefaEnum.obterPorId(tarefaDTO.getIdStatus());
+        tarefaDTO.setDescricaoStatus(statusTarefaEnum.getDescricao());
     }
 }
