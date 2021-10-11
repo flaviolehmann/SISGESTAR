@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
@@ -27,4 +29,9 @@ public class UsuarioResource {
     public ResponseEntity<UsuarioDTO> obterPorHash(@PathVariable("hash") String hash) {
         return ResponseEntity.of(usuarioService.obterPorHash(hash));
     }
+
+  @GetMapping()
+  public ResponseEntity<List<UsuarioDTO>> findAll() {
+    return ResponseEntity.ok(usuarioService.findAll());
+  }
 }
