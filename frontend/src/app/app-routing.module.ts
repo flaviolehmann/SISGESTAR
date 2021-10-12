@@ -7,13 +7,12 @@ import {HomeComponent} from './home/home.component';
 const routes: Routes = [
     { path: 'diario-erros', component: DiarioErrosComponent, data: { breadcrumb: 'Diário de Erros'} },
     { path: 'login-success', component: LoginSuccessComponent },
-    { path: '', component: HomeComponent }
+    { path: '', component: HomeComponent },
+    { path: 'user', loadChildren: () => import('./user/user.module').then(m => m.UserModule) },
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes)
-  ],
+  imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
