@@ -1,7 +1,7 @@
-import {GenericTableColumn} from '../shared/models/generic-table-column';
-import {GenericTableButton} from '../shared/models/generic-table-button';
-import {MessageUtil} from '../utils/message-util';
-import {GenericTableFilter} from '../shared/models/generic-table-filter';
+import {GenericTableColumn} from '../../shared/models/generic-table-column';
+import {GenericTableButton} from '../../shared/models/generic-table-button';
+import {MessageUtil} from '../../utils/message-util';
+import {GenericTableFilter} from '../../shared/models/generic-table-filter';
 
 export class HomeUtil {
     static COLUMNS: GenericTableColumn[] = [

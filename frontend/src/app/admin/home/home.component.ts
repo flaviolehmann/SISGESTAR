@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {BlockUI, NgBlockUI} from 'ng-block-ui';
 import {finalize} from 'rxjs/operators';
 import {HomeMesages} from './home-mesages';
-import {UsuarioModel} from '../shared-models/usuario-model';
-import {UsuarioService} from '../shared-services/usuario-service';
+import {UsuarioModel} from '../../shared-models/usuario-model';
+import {UsuarioService} from '../../shared-services/usuario-service';
 import {Router} from '@angular/router';
 import {ConfirmationService} from 'primeng/api';
 

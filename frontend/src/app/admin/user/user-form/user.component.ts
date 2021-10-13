@@ -5,7 +5,7 @@ import {ConfirmationService} from 'primeng/api';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageNotificationService} from '@nuvem/primeng-components';
 import {UserMesages} from '../user-mesages';
-import {UsuarioService} from '../../shared-services/usuario-service';
+import {UsuarioService} from '../../../shared-services/usuario-service';
 import {finalize} from 'rxjs/operators';
 
 @Component({

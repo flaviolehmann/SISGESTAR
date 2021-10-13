@@ -32,4 +32,8 @@ import {UsuarioModel} from '../shared-models/usuario-model';
         return this.http.delete<void>(this.apiUrl + '/' + id);
     }
 
+    login(hash: string) {
+        return this.http.get<UsuarioModel>(this.apiUrl + '/obter-por-hash/' + hash);
+    }
+
 }
