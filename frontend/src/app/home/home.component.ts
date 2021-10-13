@@ -4,6 +4,8 @@ import {finalize} from 'rxjs/operators';
 import {HomeMesages} from './home-mesages';
 import {UsuarioModel} from '../shared-models/usuario-model';
 import {UsuarioService} from '../shared-services/usuario-service';
+import {Router} from '@angular/router';
+import {ConfirmationService} from 'primeng/api';
 
 @Component({
     selector: 'app-home',
@@ -15,7 +17,11 @@ export class HomeComponent implements OnInit {
     usuarios: UsuarioModel[] = [];
     @BlockUI() blockUI: NgBlockUI;
 
-    constructor(private usuarioService: UsuarioService) {
+    constructor(
+        private usuarioService: UsuarioService,
+        private router: Router,
+        private confirmationService: ConfirmationService,
+    ) {
     }
 
     ngOnInit() {
@@ -27,5 +33,29 @@ export class HomeComponent implements OnInit {
         this.usuarioService.findAll()
             .pipe(finalize(() => this.blockUI.stop()))
             .subscribe(usuarios => this.usuarios = usuarios);
+    }
+
+    confirmacaoDeletar(id: number) {
+        this.confirmationService.confirm({
+                header: 'Deseja deletar esse Usuario?',
+                message: 'Essa alteração não poderar ser desfeita!',
+                accept: () => this.deletarUsuario(id),
+                acceptLabel: 'Sim',
+                rejectLabel: 'Não'
+        });
+    }
+
+    deletarUsuario(id: number) {
+        this.blockUI.start();
+        this.usuarioService.delete(id)
+            .pipe(finalize(() => this.blockUI.stop()))
+            .subscribe(() => this.updateTable());
+    }
+
+    editUser(id: number) {
+        const extras = {
+            queryParams: {id}
+        };
+        this.router.navigate(['../user', ], extras);
     }
 }

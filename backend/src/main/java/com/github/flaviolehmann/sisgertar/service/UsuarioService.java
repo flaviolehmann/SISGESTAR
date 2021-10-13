@@ -8,7 +8,6 @@ import com.github.flaviolehmann.sisgertar.service.error.UsuarioNaoEncontradaExce
 import com.github.flaviolehmann.sisgertar.service.mapper.UsuarioMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,6 +27,12 @@ public class UsuarioService {
         return usuarioMapper.toDTO(usuario);
     }
 
+    public UsuarioDTO update(UsuarioDTO usuarioDTO) {
+      Usuario usuario = usuarioMapper.toEntity(usuarioDTO);
+      usuarioRepository.save(usuario);
+      return usuarioMapper.toDTO(usuario);
+    }
+
     public UsuarioDTO obterPorId(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario)
                 .orElseThrow(UsuarioNaoEncontradaException::new);
@@ -41,5 +46,11 @@ public class UsuarioService {
     public List<UsuarioDTO> findAll() {
       List<Usuario> usuarios = usuarioRepository.findAll();
       return usuarios.stream().map(usuarioMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public void delete(Long id) {
+      Usuario usuario = usuarioRepository.findById(id)
+              .orElseThrow(UsuarioNaoEncontradaException::new);
+      usuarioRepository.delete(usuario);
     }
 }
