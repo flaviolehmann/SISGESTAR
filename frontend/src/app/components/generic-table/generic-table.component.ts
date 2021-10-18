@@ -67,8 +67,7 @@ export class GenericTableComponent implements OnInit {
   }
 
   getColumnFilter(col: GenericTableColumn): GenericTableFilter {
-      const filter = this.filters.find(f => f.field === col.field) || {} as GenericTableFilter;
-      return filter;
+      return this.filters.find(f => f.field === col.field) || {} as GenericTableFilter;
   }
 
   getColumnValue(col: any, field: string) {

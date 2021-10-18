@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {BlockUI, NgBlockUI} from 'ng-block-ui';
 import {finalize} from 'rxjs/operators';
 import {HomeMesages} from './home-mesages';
@@ -6,6 +6,12 @@ import {UsuarioModel} from '../../shared-models/usuario-model';
 import {UsuarioService} from '../../shared-services/usuario-service';
 import {Router} from '@angular/router';
 import {ConfirmationService} from 'primeng/api';
+import {GenericTableColumn} from '../../shared/models/generic-table-column';
+import {HomeUtil} from './home-util';
+import {GenericTableComponent} from '../../components/generic-table/generic-table.component';
+import {GenericTableButton} from '../../shared/models/generic-table-button';
+import {GenericTableUpdateEvent} from '../../shared/models/generic-table-update-event';
+import {Page} from '../../utils/page';
 
 @Component({
     selector: 'app-home',
@@ -16,6 +22,20 @@ export class HomeComponent implements OnInit {
     MSG = HomeMesages;
     usuarios: UsuarioModel[] = [];
     @BlockUI() blockUI: NgBlockUI;
+    COLUMNS: GenericTableColumn[] = HomeUtil.COLUMNS;
+    @ViewChild(GenericTableComponent) user: GenericTableComponent;
+    BUTTONS: GenericTableButton<UsuarioModel>[] = [
+        {
+            icon: 'edit',
+            description: 'editar',
+            action: row => this.editUser(row.id)
+        },
+        {
+            icon: 'delete',
+            description: 'deletar',
+            action: row => this.confirmacaoDeletar(row.id)
+        }
+    ];
 
     constructor(
         private usuarioService: UsuarioService,
@@ -25,14 +45,14 @@ export class HomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.updateTable();
+        this.loadTable();
     }
 
-    updateTable() {
+    loadTable() {
         this.blockUI.start();
         this.usuarioService.findAll()
             .pipe(finalize(() => this.blockUI.stop()))
-            .subscribe(usuarios => this.usuarios = usuarios);
+            .subscribe(usuarios => this.user.result =  new Page(usuarios, usuarios.length));
     }
 
     confirmacaoDeletar(id: number) {
@@ -49,13 +69,18 @@ export class HomeComponent implements OnInit {
         this.blockUI.start();
         this.usuarioService.delete(id)
             .pipe(finalize(() => this.blockUI.stop()))
-            .subscribe(() => this.updateTable());
+            .subscribe(() => this.loadTable());
     }
 
     editUser(id: number) {
+
         const extras = {
             queryParams: {id}
         };
-        this.router.navigate(['../user', ], extras);
+        this.router.navigate(['../admin/user', ], extras);
+    }
+
+    updateTable(event: GenericTableUpdateEvent) {
+        this.user.table = event.table;
     }
 }

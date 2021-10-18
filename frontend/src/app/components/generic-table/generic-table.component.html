@@ -73,7 +73,7 @@
                 <td *ngIf="hasButtons()">
                     <ng-container *ngFor="let btn of buttons">
                     <span pTooltip="{{ btn.description }}"
-                          *ngIf="btn.hideButton ? !btn.hideButton(rowData) : true"
+                          *ngIf="btn.hideButton ? !btn.hideButton(rowData) && !view : !view"
                           tooltipPosition="top"
                           class="ui-icon-{{btn.icon}} table-button {{getDisableButtonClass(btn, rowData)}}"
                           (click)="changeAction(rowData, btn, false)"
