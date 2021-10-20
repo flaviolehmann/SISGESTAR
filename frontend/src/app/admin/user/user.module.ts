@@ -4,10 +4,12 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {UserRoutingModule} from './user-routing.module';
 import {SharedModule} from '../../shared/shared.module';
 import {UserComponent} from './user-form/user.component';
+import {UserFormModalComponent} from './user-form/user-form-modal.component';
 
 
 @NgModule({
-    declarations: [UserComponent],
+    declarations: [UserComponent, UserFormModalComponent],
+    entryComponents: [UserFormModalComponent],
     imports: [
         CommonModule,
         SharedModule,

@@ -1,31 +1,32 @@
+ <app-generic-form>
   <form
     class="ui-g ui-fluid"
     [formGroup]="form"
     novalidate
+    genericFormRef
   >
-    <h1 class="ui-g-12">{{title}}</h1>
+    <h1 genericFormHeader class="ui-g-12">{{title}}</h1>
       <div class="ui-g form-group ui-g-12">
           <div class="ui-g-12 md-inputfield">
-            <label for="nome">{{MSG.USUARIO_NOME}}</label>
-            <input
-              id="nome"
-              class="ui-g-12 ui-md-6"
-              type="text"
-              formControlName="nome"
-              pInputText
-            >
-            <span *ngIf="isSubmited" class="ui-message ui-messages-error">{{ getValidationMessages('nome') }}</span>
+            <app-generic-input>
+              <input
+                sInputRef
+                type="text"
+                formControlName="nome"
+                [sLabel]="MSG.USUARIO_NOME"
+              >
+            </app-generic-input>
           </div>
           <div class="ui-g-12 md-inputfield">
-            <label for="email">{{MSG.USUARIO_EMAIL}}</label>
-            <input
-              id="email"
-              class="ui-g-12 ui-md-6"
-              type="text"
-              pInputText
-              formControlName="email"
-            >
-            <span *ngIf="isSubmited" class="ui-message ui-messages-error">{{ getValidationMessages('email') }}</span>
+            <app-generic-input>
+              <input
+                class="ui-g-12 ui-md-6"
+                type="text"
+                formControlName="email"
+                [sLabel]="MSG.USUARIO_EMAIL"
+                sInputRef
+              >
+            </app-generic-input>
           </div>
       </div>
       <div class="ui-g ui-g-12" genericFormFooterButtons>
@@ -49,4 +50,5 @@
           </div>
       </div>
   </form>
+ </app-generic-form>
 

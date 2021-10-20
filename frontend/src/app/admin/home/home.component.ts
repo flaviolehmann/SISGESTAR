@@ -12,6 +12,8 @@ import {GenericTableComponent} from '../../components/generic-table/generic-tabl
 import {GenericTableButton} from '../../shared/models/generic-table-button';
 import {GenericTableUpdateEvent} from '../../shared/models/generic-table-update-event';
 import {Page} from '../../utils/page';
+import {ModalService} from '../../utils/modal.service';
+import {UserFormModalComponent} from '../user/user-form/user-form-modal.component';
 
 @Component({
     selector: 'app-home',
@@ -41,6 +43,7 @@ export class HomeComponent implements OnInit {
         private usuarioService: UsuarioService,
         private router: Router,
         private confirmationService: ConfirmationService,
+        private modalService: ModalService
     ) {
     }
 
@@ -73,11 +76,7 @@ export class HomeComponent implements OnInit {
     }
 
     editUser(id: number) {
-
-        const extras = {
-            queryParams: {id}
-        };
-        this.router.navigate(['../admin/user', ], extras);
+        this.modalService.openModal(UserFormModalComponent, {}, {id});
     }
 
     updateTable(event: GenericTableUpdateEvent) {

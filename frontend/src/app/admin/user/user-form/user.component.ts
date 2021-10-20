@@ -7,18 +7,22 @@ import {PageNotificationService} from '@nuvem/primeng-components';
 import {UserMesages} from '../user-mesages';
 import {UsuarioService} from '../../../shared-services/usuario-service';
 import {finalize} from 'rxjs/operators';
+import {BaseEntityForm} from '../../../utils/base-entity-form';
+import {UsuarioModel} from '../../../shared-models/usuario-model';
+import {ModalService} from '../../../utils/modal.service';
 
 @Component({
-    selector: 'app-home',
+    selector: 'app-user',
     templateUrl: './user.component.html',
     styleUrls: ['user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent extends BaseEntityForm<UsuarioModel> implements OnInit {
     MSG = UserMesages;
     form: FormGroup;
     isSubmited = false;
     @BlockUI() blockUI: NgBlockUI;
     title = 'Novo Usuario';
+    SERVICE = this.usuarioService;
 
     constructor(
         private usuarioService: UsuarioService,
@@ -26,26 +30,23 @@ export class UserComponent implements OnInit {
         protected router: Router,
         protected pageNotificationService: PageNotificationService,
         protected formBuilder: FormBuilder,
-        protected route: ActivatedRoute
+        protected route: ActivatedRoute,
+        protected modalService: ModalService
     ) {
+        super(confirmationService, router, pageNotificationService, formBuilder, route, modalService);
     }
 
     ngOnInit() {
-        this.form = this.buildReactiveForm();
         this.route.queryParams.subscribe(param => {
             if (param.id) {
                 this.title = 'Editar Usuario';
-                this.obterPorId(param.id);
+                this.entityId = param.id;
             }
         });
+        this.form = this.buildReactiveForm();
+        this.loadEntity();
     }
 
-    obterPorId(id: number) {
-        this.blockUI.start();
-        this.usuarioService.findById(id)
-            .pipe(finalize(() => this.blockUI.stop()))
-            .subscribe(usuario => this.form.patchValue(usuario));
-    }
 
     buildReactiveForm() {
         return this.formBuilder.group({
@@ -61,18 +62,9 @@ export class UserComponent implements OnInit {
         this.title = 'Novo Usuario';
     }
 
-    saveForm() {
-        this.validarForm();
-        if (this.form.invalid) {
-            return;
-        }
-
-        this.form.controls.id ? this.editarUsuario() : this.salvarUsuario();
-    }
-
-    salvarUsuario() {
+    salvarUsuario(usuario: UsuarioModel) {
         this.blockUI.start();
-        this.usuarioService.insert(this.form.value)
+        this.usuarioService.insert(usuario)
             .pipe(finalize(() => this.blockUI.stop()))
             .subscribe(() => {
                 this.pageNotificationService.addSuccessMessage(UserMesages.USUARIO_SAVE_SUCESS);
@@ -80,9 +72,9 @@ export class UserComponent implements OnInit {
             });
     }
 
-    editarUsuario() {
+    editarUsuario(usuario: UsuarioModel) {
         this.blockUI.start();
-        this.usuarioService.update(this.form.value)
+        this.usuarioService.update(usuario)
             .pipe(finalize(() => this.blockUI.stop()))
             .subscribe(() => {
                 this.pageNotificationService.addSuccessMessage(UserMesages.USUARIO_SAVE_SUCESS);
@@ -94,18 +86,11 @@ export class UserComponent implements OnInit {
         this.router.navigate(['../']);
     }
 
-    validarForm() {
-        this.isSubmited = true;
-        for (const controlsKey in this.form.controls) {
-            this.form.controls[controlsKey].markAsTouched();
-        }
+    onLoadEntity(entity: UsuarioModel) {
+        this.form.patchValue(entity);
     }
 
-    getValidationMessages(controlName: string): string {
-        const control = this.form.controls[controlName];
-        if ((control.dirty || control.touched) && control.errors) {
-            return 'Campo obrigatório';
-        }
-        return '';
+    sendForm(entity: UsuarioModel) {
+        this.form.controls.id ? this.editarUsuario(entity) : this.salvarUsuario(entity);
     }
 }

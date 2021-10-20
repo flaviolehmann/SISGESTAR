@@ -1,39 +1,22 @@
 import {HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {Observable} from 'rxjs';
 import {UsuarioModel} from '../shared-models/usuario-model';
+import {BaseEntityService} from '../utils/base-entity-service';
 
 @Injectable({
     providedIn: 'root'
-})export class UsuarioService {
+})export class UsuarioService extends BaseEntityService<UsuarioModel, any> {
 
-    private apiUrl = 'api/usuarios';
+    getEntity(): string {
+        return 'usuarios';
+    }
 
     constructor(protected http: HttpClient) {
-    }
-
-    insert(entity: UsuarioModel): Observable<UsuarioModel> {
-        return this.http.post<UsuarioModel>(this.apiUrl, entity);
-    }
-
-    findById(id: number): Observable<UsuarioModel> {
-        return this.http.get<UsuarioModel>(this.apiUrl + '/' + id);
-    }
-
-    findAll(): Observable<UsuarioModel[]> {
-        return this.http.get<UsuarioModel[]>(this.apiUrl);
-    }
-
-    update(entity: UsuarioModel): Observable<UsuarioModel> {
-        return this.http.put<UsuarioModel>(this.apiUrl, entity);
-    }
-
-    delete(id: number): Observable<void> {
-        return this.http.delete<void>(this.apiUrl + '/' + id);
+        super(http);
     }
 
     login(hash: string) {
-        return this.http.get<UsuarioModel>(this.apiUrl + '/obter-por-hash/' + hash);
+        return this.http.get<UsuarioModel>(this.resourceUrl + '/obter-por-hash/' + hash);
     }
 
 }
