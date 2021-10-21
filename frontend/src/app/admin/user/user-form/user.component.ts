@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {BlockUI, NgBlockUI} from 'ng-block-ui';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
@@ -19,10 +19,10 @@ import {ModalService} from '../../../utils/modal.service';
 export class UserComponent extends BaseEntityForm<UsuarioModel> implements OnInit {
     MSG = UserMesages;
     form: FormGroup;
-    isSubmited = false;
     @BlockUI() blockUI: NgBlockUI;
     title = 'Novo Usuario';
     SERVICE = this.usuarioService;
+    @Output() saveUser = new EventEmitter<void>();
 
     constructor(
         private usuarioService: UsuarioService,
@@ -37,16 +37,8 @@ export class UserComponent extends BaseEntityForm<UsuarioModel> implements OnIni
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(param => {
-            if (param.id) {
-                this.title = 'Editar Usuario';
-                this.entityId = param.id;
-            }
-        });
         this.form = this.buildReactiveForm();
-        this.loadEntity();
     }
-
 
     buildReactiveForm() {
         return this.formBuilder.group({
@@ -83,7 +75,7 @@ export class UserComponent extends BaseEntityForm<UsuarioModel> implements OnIni
     }
 
     navegarParaDashboard() {
-        this.router.navigate(['../']);
+        this.saveUser.emit();
     }
 
     onLoadEntity(entity: UsuarioModel) {
@@ -91,6 +83,6 @@ export class UserComponent extends BaseEntityForm<UsuarioModel> implements OnIni
     }
 
     sendForm(entity: UsuarioModel) {
-        this.form.controls.id ? this.editarUsuario(entity) : this.salvarUsuario(entity);
+        entity.id ? this.editarUsuario(entity) : this.salvarUsuario(entity);
     }
 }

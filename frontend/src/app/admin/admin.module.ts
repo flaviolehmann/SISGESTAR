@@ -9,6 +9,7 @@ import {BreadcrumbModule, MenuModule, PageNotificationModule} from '@nuvem/prime
 import { VersionTagModule } from '@nuvem/angular-base';
 import {BlockUIModule} from 'ng-block-ui';
 import {HomeComponent} from './home/home.component';
+import {UserModule} from './user/user.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import {HomeComponent} from './home/home.component';
         MenuModule,
         VersionTagModule,
         BlockUIModule,
-        PageNotificationModule
+        PageNotificationModule,
+        UserModule
     ]
 })
 export class AdminModule { }

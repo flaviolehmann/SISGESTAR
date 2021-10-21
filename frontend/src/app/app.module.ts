@@ -11,9 +11,8 @@ import { PageNotificationModule, BreadcrumbModule, MenuModule, ErrorStackModule 
 import { ErrorModule, SecurityModule, VersionTagModule } from '@nuvem/angular-base';
 import { DiarioErrosComponent } from './components/diario-erros/diario-erros.component';
 import { BlockUIModule } from 'ng-block-ui';
-import {ResponsavelService} from './shared-services/responsavel-service';
 import {ReactiveFormsModule} from '@angular/forms';
-import {KeyFilterModule} from 'primeng';
+import { KeyFilterModule} from 'primeng';
 import {LoginComponent} from './login/login.component';
 
 @NgModule({
@@ -43,7 +42,6 @@ import {LoginComponent} from './login/login.component';
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        ResponsavelService
     ],
     bootstrap: [AppComponent]
 })

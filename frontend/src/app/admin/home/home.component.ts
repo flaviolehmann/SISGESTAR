@@ -14,6 +14,7 @@ import {GenericTableUpdateEvent} from '../../shared/models/generic-table-update-
 import {Page} from '../../utils/page';
 import {ModalService} from '../../utils/modal.service';
 import {UserFormModalComponent} from '../user/user-form/user-form-modal.component';
+import {UserComponent} from '../user/user-form/user.component';
 
 @Component({
     selector: 'app-home',
@@ -22,10 +23,14 @@ import {UserFormModalComponent} from '../user/user-form/user-form-modal.componen
 })
 export class HomeComponent implements OnInit {
     MSG = HomeMesages;
+    MODAL = UserFormModalComponent;
     usuarios: UsuarioModel[] = [];
+    showDialogUser = false;
     @BlockUI() blockUI: NgBlockUI;
     COLUMNS: GenericTableColumn[] = HomeUtil.COLUMNS;
     @ViewChild(GenericTableComponent) user: GenericTableComponent;
+    @ViewChild('form') userFform!: UserComponent;
+
     BUTTONS: GenericTableButton<UsuarioModel>[] = [
         {
             icon: 'edit',
@@ -76,7 +81,14 @@ export class HomeComponent implements OnInit {
     }
 
     editUser(id: number) {
-        this.modalService.openModal(UserFormModalComponent, {}, {id});
+        this.showDialogUser = true;
+        this.userFform.entityId = id;
+        this.userFform.loadEntity();
+    }
+
+    closeUserModal() {
+        this.showDialogUser = false;
+        this.loadTable();
     }
 
     updateTable(event: GenericTableUpdateEvent) {

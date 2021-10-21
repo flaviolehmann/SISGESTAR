@@ -10,6 +10,9 @@ import {UserFormModalComponent} from './user-form/user-form-modal.component';
 @NgModule({
     declarations: [UserComponent, UserFormModalComponent],
     entryComponents: [UserFormModalComponent],
+    exports: [
+        UserComponent
+    ],
     imports: [
         CommonModule,
         SharedModule,
