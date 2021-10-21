@@ -9,7 +9,8 @@ import {BreadcrumbModule, MenuModule, PageNotificationModule} from '@nuvem/prime
 import { VersionTagModule } from '@nuvem/angular-base';
 import {BlockUIModule} from 'ng-block-ui';
 import {HomeComponent} from './home/home.component';
-import {UserModule} from './user/user.module';
+import {UserComponent} from './home/user-form/user.component';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {UserModule} from './user/user.module';
     AdminComponent,
     AppTopbarComponent,
     AppFooterComponent,
-    HomeComponent
+    HomeComponent,
+    UserComponent
   ],
     imports: [
         CommonModule,
@@ -28,7 +30,7 @@ import {UserModule} from './user/user.module';
         VersionTagModule,
         BlockUIModule,
         PageNotificationModule,
-        UserModule
+        ReactiveFormsModule
     ]
 })
 export class AdminModule { }

@@ -15,14 +15,14 @@
                 type="text"
                 formControlName="nome"
                 [sLabel]="MSG.USUARIO_NOME"
-                class="ui-g-12 ui-md-6"
+                class="ui-g-12"
               />
             </app-generic-input>
           </div>
-          <div class="ui-g-12 md-inputfield">
+          <div class="ui-g-12">
             <app-generic-input>
               <input
-                class="ui-g-12 ui-md-6"
+                class="ui-g-12"
                 type="text"
                 formControlName="email"
                 [sLabel]="MSG.USUARIO_EMAIL"
@@ -31,16 +31,13 @@
             </app-generic-input>
           </div>
       </div>
-      <div class="ui-g ui-g-12" genericFormFooterButtons>
-          <div class="ui-g-6">
+      <div class="ui-g ui-g-12 flex-between" genericFormFooterButtons>
               <button
                 pButton
                 type="submit"
                 label="save"
                 icon="ui-icon-save"
               ></button>
-          </div>
-          <div class="ui-g-6">
               <button
                 class="ui-button-secondary"
                 pButton type="button"
@@ -48,7 +45,6 @@
                 (click)="clearForm()"
                 icon="ui-icon-cancel"
               ></button>
-          </div>
       </div>
   </form>
  </app-generic-form>

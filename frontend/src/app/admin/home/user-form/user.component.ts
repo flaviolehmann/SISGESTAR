@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmationService} from 'primeng/api';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PageNotificationService} from '@nuvem/primeng-components';
-import {UserMesages} from '../user-mesages';
+import {UserMesages} from './user-mesages';
 import {UsuarioService} from '../../../shared-services/usuario-service';
 import {finalize} from 'rxjs/operators';
 import {BaseEntityForm} from '../../../utils/base-entity-form';

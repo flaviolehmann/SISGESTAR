@@ -12,9 +12,7 @@ import {GenericTableComponent} from '../../components/generic-table/generic-tabl
 import {GenericTableButton} from '../../shared/models/generic-table-button';
 import {GenericTableUpdateEvent} from '../../shared/models/generic-table-update-event';
 import {Page} from '../../utils/page';
-import {ModalService} from '../../utils/modal.service';
-import {UserFormModalComponent} from '../user/user-form/user-form-modal.component';
-import {UserComponent} from '../user/user-form/user.component';
+import {UserComponent} from './user-form/user.component';
 
 @Component({
     selector: 'app-home',
@@ -23,7 +21,6 @@ import {UserComponent} from '../user/user-form/user.component';
 })
 export class HomeComponent implements OnInit {
     MSG = HomeMesages;
-    MODAL = UserFormModalComponent;
     usuarios: UsuarioModel[] = [];
     showDialogUser = false;
     @BlockUI() blockUI: NgBlockUI;
@@ -47,8 +44,7 @@ export class HomeComponent implements OnInit {
     constructor(
         private usuarioService: UsuarioService,
         private router: Router,
-        private confirmationService: ConfirmationService,
-        private modalService: ModalService
+        private confirmationService: ConfirmationService
     ) {
     }
 
